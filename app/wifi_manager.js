@@ -33,7 +33,7 @@ function write_template_to_file(template_path, file_name, context, callback) {
 \*****************************************************************************/
 module.exports = function() {
     // Detect which wifi driver we should use, the rtl871xdrv or the nl80211
-    exec("iw list", function(error, stdout, stderr) {
+    exec("sudo iw list", function(error, stdout, stderr) {
         if (stderr.match(/^nl80211 not found/)) {
             config.wifi_driver_type = "rtl871xdrv";
         }
@@ -80,10 +80,10 @@ module.exports = function() {
         // Run a bunch of commands and aggregate info
         async.series([
             function run_ifconfig(next_step) {
-                run_command_and_set_fields("ifconfig wlan0", ifconfig_fields, next_step);
+                run_command_and_set_fields("sudo ifconfig wlan0", ifconfig_fields, next_step);
             },
             function run_iwconfig(next_step) {
-                run_command_and_set_fields("iwconfig wlan0", iwconfig_fields, next_step);
+                run_command_and_set_fields("sudo iwconfig wlan0", iwconfig_fields, next_step);
             },
         ], function(error) {
             last_wifi_info = output;
@@ -132,9 +132,16 @@ module.exports = function() {
         // If the hw_addr matches the ap_addr
         // and the ap_ssid matches "rpi-config-ap"
         // then we are in AP mode
+        if (info["ap_ssid"] === null || info["ap_ssid"] === undefined){
+          info["ap_ssid"] = config.access_point.ssid
+        }
+        if (info["ap_addr"] === null || info["ap_addr"] === undefined || info["ap_addr"] == 'Not-Associated'){
+          info["ap_addr"] = info["hw_addr"]
+        }
         var is_ap  =
-            info["hw_addr"].toLowerCase() == info["ap_addr"].toLowerCase() &&
+            info["hw_addr"] == info["ap_addr"] &&
             info["ap_ssid"] == config.access_point.ssid;
+
         return (is_ap) ? info["hw_addr"].toLowerCase() : null;
     },
 
