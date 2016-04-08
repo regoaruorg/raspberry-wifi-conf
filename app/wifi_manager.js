@@ -153,7 +153,7 @@ module.exports = function() {
     },
 
     // Enables the accesspoint w/ bcast_ssid. This assumes that both
-    // isc-dhcp-server and hostapd are installed using:
+    // dnsmasq and hostapd are installed using:
     // $sudo npm run-script provision
     _enable_ap_mode = function(bcast_ssid, callback) {
         _is_ap_enabled(function(error, result_addr) {
@@ -200,8 +200,8 @@ module.exports = function() {
                 // Enable the interface in the dhcp server
                 function update_dhcp_interface(next_step) {
                     write_template_to_file(
-                        "./assets/etc/default/isc-dhcp-server.template",
-                        "/etc/default/isc-dhcp-server",
+                        "./assets/etc/dnsmasq/dnsmasq.conf.template",
+                        "/etc/dnsmasq.conf",
                         context, next_step);
                 },
 
@@ -225,7 +225,7 @@ module.exports = function() {
                 },
 
                 function restart_dhcp_service(next_step) {
-                    exec("service isc-dhcp-server restart", function(error, stdout, stderr) {
+                    exec("service dnsmasq restart", function(error, stdout, stderr) {
                         //console.log(stdout);
                         if (!error) console.log("... dhcp server restarted!");
                         next_step();
@@ -269,12 +269,22 @@ module.exports = function() {
 
                 // Stop the DHCP server...
                 function restart_dhcp_service(next_step) {
-                    exec("service isc-dhcp-server stop", function(error, stdout, stderr) {
+                    exec("service dnsmasq stop", function(error, stdout, stderr) {
                         //console.log(stdout);
                         if (!error) console.log("... dhcp server stopped!");
                         next_step();
                     });
                 },
+
+                // Stop the hostapd server...
+                function restart_hostapd_service(next_step) {
+                    exec("service hostapd stop", function(error, stdout, stderr) {
+                        //console.log(stdout);
+                        if (!error) console.log("... hostapd stop!");
+                        next_step();
+                    });
+                },
+
 
                 function reboot_network_interfaces(next_step) {
                     _reboot_wireless_network(config.wifi_interface, next_step);

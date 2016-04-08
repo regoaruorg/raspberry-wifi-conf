@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "npm test",
-    "provision": "apt-get update -y && apt-get install dnsmasq hostapd iw -y && cp -f /etc/wpa_supplicant/wpa_supplicant.conf ./assets/etc/default/wpa_supplicant.conf && cp -f /etc/network/interfaces ./assets/etc/default/interfaces && cp -f /etc/dhcpcd.conf ./assets/etc/default/dhcpcd.conf && cp -f /etc/dnsmasq.conf ./assets/etc/default/dnsmasq.conf && cp -f /etc/default/hostapd ./assets/etc/default/hostapd",
+    "provision": "apt-get update -y && apt-get install dnsmasq hostapd iw -y && echo '##########\n COPY DEFAULT CONFIG FILE\n ##########' && cp -f /etc/wpa_supplicant/wpa_supplicant.conf ./assets/etc/default/wpa_supplicant.conf && cp -f /etc/network/interfaces ./assets/etc/default/interfaces && cp -f /etc/dhcpcd.conf ./assets/etc/default/dhcpcd.conf && cp -f /etc/dnsmasq.conf ./assets/etc/default/dnsmasq.conf && cp -f /etc/default/hostapd ./assets/etc/default/hostapd",
     "bootstrap": "wget http://treebeard.home.net:1234/bootstrap/pifi-conf -O bootstrap.sh && chmod u+x bootstrap.sh && ./bootstrap.sh"
   },
   "repository": {
