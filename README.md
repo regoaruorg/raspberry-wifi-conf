@@ -24,7 +24,7 @@ If you do not have `bower` installed already, you can install it globally by run
 $git clone https://github.com/sabhiram/raspberry-wifi-conf.git
 $cd raspberry-wifi-conf
 $npm update
-$npm install bower -g
+$npm install bower -g # If you do not have `bower`
 $bower install
 $sudo npm run-script provision
 $sudo npm start
