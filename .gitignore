@@ -2,3 +2,8 @@
 /npm-debug.log
 /app/public/external
 node.pid
+/assets/etc/default/wpa_supplicant.conf
+/assets/etc/default/interfaces
+/assets/etc/default/dhcpcd.conf
+/assets/etc/default/dnsmasq.conf
+/assets/etc/default/hostapd
