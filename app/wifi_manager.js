@@ -267,7 +267,7 @@ module.exports = function() {
 
             async.series([
 
-                // 
+                //
                 function update_dhcpcd(next_step) {
                     write_template_to_file(
                         "./assets/etc/default/dhcpcd.conf",
@@ -287,7 +287,7 @@ module.exports = function() {
                 function update_wpa(next_step) {
                     write_template_to_file(
                         "./assets/etc/wpa_supplicant/wpa_supplicant.conf.template",
-                        "/etc/network/wpa_supplicant.conf",
+                        "/etc/wpa_supplicant/wpa_supplicant.conf",
                         connection_info, next_step);
                 },
 
