@@ -26,6 +26,21 @@ function write_template_to_file(template_path, file_name, context, callback) {
 
     ], callback);
 }
+// DEl file
+function del_config_file(file_name, callback) {
+    async.waterfall([
+
+        function del_file(next_step) {
+          console.log("--Going to delete an existing file");
+          fs.unlink(file_name, function(err) {
+           if (err) {
+               return console.error(err);
+           }
+           console.log("--File deleted successfully!");
+          });
+        },
+    ], callback);
+}
 
 /*****************************************************************************\
     Return a set of functions which we can use to manage and check our wifi
@@ -268,6 +283,12 @@ module.exports = function() {
             async.series([
 
                 //
+                function del_hostapd(next_step) {
+                    del_config_file(
+                        "/etc/hostapd/hostapd.conf",
+                        next_step);
+                },
+
                 function update_dhcpcd(next_step) {
                     write_template_to_file(
                         "./assets/etc/default/dhcpcd.conf",
