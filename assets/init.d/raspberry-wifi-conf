@@ -15,6 +15,16 @@
 case "$1" in
   start)
     echo "Starting raspberry-wifi-conf service"
+    sleep 10s
+    if [ -f /etc/hostapd/hostapd.conf]
+      then
+        cd /home/pi/raspberry-wifi-conf
+        sudo /usr/bin/node server.js &
+        echo $! > node.pid
+      else
+        echo "wifi enable"
+        exit 1
+    fi
     cd /home/pi/raspberry-wifi-conf
     sudo /usr/bin/node server.js &
     echo $! > node.pid
