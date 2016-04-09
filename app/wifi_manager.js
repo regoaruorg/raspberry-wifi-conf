@@ -29,16 +29,20 @@ function write_template_to_file(template_path, file_name, context, callback) {
 // DEl file
 function del_config_file(file_name, callback) {
     async.waterfall([
+      function log(next_step) {
+          console.log("... Going to delete an config file", next_step);
+      },
 
-        function del_file(next_step) {
+      function del_file(next_step) {
+          var template = _.template(file_txt);
           console.log("--Going to delete an existing file");
           fs.unlink(file_name, function(err) {
              if (err) {
                  return console.error(err);
              }
-             console.log("--File deleted successfully!");
-          }, next_step);
-        }
+          });
+          console.log("--File deleted successfully!", next_step);
+      }
     ], callback);
 }
 
