@@ -267,10 +267,8 @@ module.exports = function() {
 
             async.series([
 
-                // Enable DHCP conf, set authoritative mode and subnet
+                // 
                 function update_dhcpcd(next_step) {
-                    var context = config.access_point;
-                    // We must enable this to turn on the access point
                     write_template_to_file(
                         "./assets/etc/default/dhcpcd.conf",
                         "/etc/dhcpcd.conf",
