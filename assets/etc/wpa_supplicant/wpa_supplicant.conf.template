@@ -3,6 +3,6 @@ ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 
 network={
-    ssid="OnLime_030A"
-    psk="megatron"
+    ssid="{{ wifi_ssid }}"
+    psk="{{ wifi_passcode }}"
 }
