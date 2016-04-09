@@ -274,7 +274,7 @@ module.exports = function() {
                     write_template_to_file(
                         "./assets/etc/default/dhcpcd.conf",
                         "/etc/dhcpcd.conf",
-                        context, next_step);
+                        connection_info, next_step);
                 },
 
                 // Update /etc/network/interface with correct info...
@@ -282,6 +282,14 @@ module.exports = function() {
                     write_template_to_file(
                         "./assets/etc/network/interfaces.wifi.template",
                         "/etc/network/interfaces",
+                        connection_info, next_step);
+                },
+
+                // Update /etc/network/interface with correct info...
+                function update_wpa(next_step) {
+                    write_template_to_file(
+                        "./assets/etc/wpa_supplicant/wpa_supplicant.conf.template",
+                        "/etc/network/wpa_supplicant.conf",
                         connection_info, next_step);
                 },
 
