@@ -38,7 +38,7 @@ function del_config_file(file_name, callback) {
              }
              console.log("--File deleted successfully!");
           }, next_step);
-        },
+        }
     ], callback);
 }
 
