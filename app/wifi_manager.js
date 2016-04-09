@@ -188,17 +188,17 @@ module.exports = function() {
                 },
 
                 // Enable DHCP conf, set authoritative mode and subnet
-                function update_dhcpd(next_step) {
+                function update_dhcpcd(next_step) {
                     var context = config.access_point;
                     // We must enable this to turn on the access point
                     write_template_to_file(
-                        "./assets/etc/dhcp/dhcpd.conf.template",
-                        "/etc/dhcp/dhcpd.conf",
+                        "./assets/etc/dhcp/dhcpcd.conf.template",
+                        "/etc/dhcpcd.conf",
                         context, next_step);
                 },
 
                 // Enable the interface in the dhcp server
-                function update_dhcp_interface(next_step) {
+                function update_dns_interface(next_step) {
                     write_template_to_file(
                         "./assets/etc/dnsmasq/dnsmasq.conf.template",
                         "/etc/dnsmasq.conf",
@@ -225,9 +225,17 @@ module.exports = function() {
                 },
 
                 function restart_dhcp_service(next_step) {
+                    exec("service dhcpcd restart", function(error, stdout, stderr) {
+                        //console.log(stdout);
+                        if (!error) console.log("... dhcpcd server restarted!");
+                        next_step();
+                    });
+                },
+
+                function restart_dns_service(next_step) {
                     exec("service dnsmasq restart", function(error, stdout, stderr) {
                         //console.log(stdout);
-                        if (!error) console.log("... dhcp server restarted!");
+                        if (!error) console.log("... dnsmasq server restarted!");
                         next_step();
                     });
                 },
@@ -259,8 +267,18 @@ module.exports = function() {
 
             async.series([
 
+                // Enable DHCP conf, set authoritative mode and subnet
+                function update_dhcpcd(next_step) {
+                    var context = config.access_point;
+                    // We must enable this to turn on the access point
+                    write_template_to_file(
+                        "./assets/etc/default/dhcpcd.conf",
+                        "/etc/dhcpcd.conf",
+                        context, next_step);
+                },
+
                 // Update /etc/network/interface with correct info...
-                function update_interfaces(next_step) {
+                function update_dhcp(next_step) {
                     write_template_to_file(
                         "./assets/etc/network/interfaces.wifi.template",
                         "/etc/network/interfaces",
