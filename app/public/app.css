@@ -108,59 +108,44 @@ html, body {
 }
 
 /*
-
 .password_input {
     margin: 0 auto;
-
     width: 80%; max-width: 300px;
     height: 45px;
-
     background: #f0f9fe;
-
     -webkit-transition: all 0.3s ease;
     -moz-transition:    all 0.3s ease;
     -ms-transition:     all 0.3s ease;
     -o-transition:      all 0.3s ease;
     transition:         all 0.3s ease;
-
     overflow: hidden;
 }
-
 .password_input.hidden {
     height: 0px;
 }
-
 .password_input input {
     width: 98%;
     height: 87%;
     line-height: 134%;
-
     font-size: 17pt;
 }
-
 .submit_btn {
     margin: 0 auto;
-
     width: 80%; max-width: 300px;
     height: 45px; line-height: 45px;
-
     background: #222222;
     color: white;
     cursor: pointer;
-
     font-size: 18pt;
     text-align: center;
-
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
-
     -webkit-transition: all 0.3s ease;
     -moz-transition:    all 0.3s ease;
     -ms-transition:     all 0.3s ease;
     -o-transition:      all 0.3s ease;
     transition:         all 0.3s ease;
 }
-
 .submit_btn:hover {
     background: #28e602;
     color: black;
@@ -198,7 +183,7 @@ html, body {
     margin: auto;
 
     width: 320px;
-    height: 150px;
+    height: 175px;
 
     background: rgba(0,0,0,1.0);
     border: 2px solid #666666;
@@ -245,4 +230,38 @@ html, body {
 }
 .btn-ok:hover {
     background: #22ff22;
+}
+.connection-info {
+    color: #fff;
+    display: block;
+    text-align: center;
+    top: 145px;
+    left: 120px;
+    position: absolute;
+}
+.connection-info.hide-me {
+    top: 100%;
+    opacity: 0;
+}
+/*loading anim*/
+.loading:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4,end) 900ms infinite;
+    animation: ellipsis steps(4,end) 900ms infinite;
+    content: "\2026"; /* ascii code for the ellipsis character */
+    width: 0px;
+}
+
+@keyframes ellipsis {
+    to {
+        width: 20px;
+    }
+}
+
+@-webkit-keyframes ellipsis {
+    to {
+        width: 20px;
+    }
 }
