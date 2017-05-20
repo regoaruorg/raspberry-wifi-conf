@@ -9,10 +9,8 @@ var app = angular.module("RpiWifiConfig", []);
 /******************************************************************************\
 Function:
     AppController
-
 Dependencies:
     ...
-
 Description:
     Main application controller
 \******************************************************************************/
@@ -25,6 +23,7 @@ app.controller("AppController", ["PiManager", "$scope", "$location", "$timeout",
         $scope.scan_running              = false;
         $scope.network_passcode          = "";
         $scope.show_passcode_entry_field = false;
+        $scope.connecting                = false;
 
         // Scope filter definitions
         $scope.orderScanResults = function(cell) {
@@ -57,15 +56,20 @@ app.controller("AppController", ["PiManager", "$scope", "$location", "$timeout",
         $scope.submit_selection = function() {
             if (!$scope.selected_cell) return;
 
+            $scope.connecting = true;
             var wifi_info = {
                 wifi_ssid:      $scope.selected_cell["ssid"],
                 wifi_passcode:  $scope.network_passcode,
             };
 
             PiManager.enable_wifi(wifi_info).then(function(response) {
+                $scope.connecting = false;
                 console.log(response.data);
                 if (response.data.status == "SUCCESS") {
+                    alert("connecting successful, AP enabled");
                     console.log("AP Enabled - nothing left to do...");
+                } else {
+                    alert("connecting failed");
                 }
             });
         }
@@ -105,17 +109,20 @@ app.directive("rwcPasswordEntry", function($timeout) {
             passcode: "=",
             reset:    "&",
             submit:   "&",
+            connecting: "=",
         },
 
         replace: true,          // Use provided template (as opposed to static
                                 // content that the modal scope might define in the
                                 // DOM)
+
         template: [
             "<div class='rwc-password-entry-container' ng-class='{\"hide-me\": !visible}'>",
             "    <div class='box'>",
             "         <input type = 'password' placeholder = 'Passcode...' ng-model = 'passcode' />",
             "         <div class = 'btn btn-cancel' ng-click = 'reset(null)'>Cancel</div>",
             "         <div class = 'btn btn-ok' ng-click = 'submit()'>Submit</div>",
+            "         <span class = 'connection-info loading' ng-class='{\"hide-me\": !connecting}'>Connecting</span>",
             "    </div>",
             "</div>"
         ].join("\n"),
