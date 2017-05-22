@@ -112,10 +112,14 @@ module.exports = function() {
             function up(next_step) {
                 exec("sudo ifup " + wlan_iface, function(error, stdout, stderr) {
                     if (!error) console.log("ifup " + wlan_iface + " successful...");
-                    next_step();
+                    let err = null;
+                    if (stdout.toLowerCase().indexOf("error") !== -1) {
+                        err = stdout;
+                    }
+                    callback(err);
                 });
             },
-        ], callback);
+        ]);
     },
 
     // Wifi related functions
