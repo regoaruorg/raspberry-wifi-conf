@@ -65,10 +65,11 @@ module.exports = function(wifi_manager, callback) {
                     console.log("... AP mode reset");
                 });
                 response.redirect("/");
+            } else {
+                // Success! - exit
+                console.log("Wifi Enabled! - Exiting");
+                process.exit(0);
             }
-            // Success! - exit
-            console.log("Wifi Enabled! - Exiting");
-            process.exit(0);
         });
     });
 
