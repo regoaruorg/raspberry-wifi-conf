@@ -112,8 +112,11 @@ module.exports = function() {
             function up(next_step) {
                 exec("sudo ifup " + wlan_iface, function(error, stdout, stderr) {
                     if (!error) console.log("ifup " + wlan_iface + " successful...");
+                    console.log("ifup stdout: " + stdout);
+                    console.log("ifup stderr: " + stderr);
+
                     let err = null;
-                    if (stdout.toLowerCase().indexOf("error") !== -1) {
+                    if (stdout.toLowerCase().indexOf("error") !== -1 || stdout.toLowerCase().indexOf("failed") !== -1) {
                         err = stdout;
                     }
                     callback(err);
