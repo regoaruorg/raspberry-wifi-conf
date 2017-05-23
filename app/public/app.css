@@ -231,7 +231,7 @@ html, body {
 .btn-ok:hover {
     background: #22ff22;
 }
-.connection-info {
+.connection-info, .connection-outcome-info {
     color: #fff;
     display: block;
     text-align: center;
@@ -239,6 +239,7 @@ html, body {
     left: 120px;
     position: absolute;
 }
+
 .connection-info.hide-me {
     top: 100%;
     opacity: 0;

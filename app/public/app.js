@@ -54,6 +54,8 @@ app.controller("AppController", ["PiManager", "$scope", "$location", "$timeout",
         }
 
         $scope.submit_selection = function() {
+            var connected = true;
+
             if (!$scope.selected_cell) return;
 
             $scope.connecting = true;
@@ -67,28 +69,42 @@ app.controller("AppController", ["PiManager", "$scope", "$location", "$timeout",
                     $scope.connecting = false;
                     console.log(response.data);
                     if (response.data.status == "SUCCESS") {
-                        alert("connecting successful, AP enabled");
-                        console.log("AP Enabled - nothing left to do...");
                     } else {
-                        alert("connecting failed");
+                        alert("Connecting failed");
+                        connected = false;
                     }
                 },
                 function (response) { //ERROR
                     if (response.status === -1) { //probably network error after AP was switched of
                         // wait for 2 minutes (AP should be up by then - when connecting to the wifi failed) and then
-                        // check for the wifi status
+                        // check for the wifi status message (wifi status message should return error, in case of success
+                        // access point should not come up at all)
+                        console.log("network error, waiting 2 minutes and then asking for wifi status")
                         setTimeout(function () {
                             PiManager.get_wifi_status().then(
                                 function (response) { //SUCCESS
+                                    $scope.connecting = false;
+                                    if(response.data.status == "error") {
+                                      alert("Connecting failed");
+                                      connected = false;
+                                    }
                                     console.log(response)
                                 },
                                 function (response) { //ERROR
+                                    $scope.connecting = false;
                                     console.log(response)
                                 }
                             );
                         }, 1000 * 60 * 2);
                     }
-                });
+                }
+            );
+
+            setTimeout(function () {
+                if (connected) {
+                    alert("Connecting successful");
+                }
+            }, (1000 * 60 * 2) + 30 * 1000); //2m 30sec
         }
 
         // Defer load the scanned results from the rpi
