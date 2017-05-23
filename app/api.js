@@ -6,6 +6,8 @@ var path       = require("path"),
     config     = require("../config.json"),
     http_test  = config.http_test_only;
 
+var wifi_status = null;
+
 // Helper function to log errors and send a generic status "SUCCESS"
 // message to the caller
 function log_error_send_success_with(success_obj, error, response) {
@@ -50,6 +52,8 @@ module.exports = function(wifi_manager, callback) {
     });
 
     app.post("/api/enable_wifi", function(request, response) {
+        wifi_status = "enabling";
+
         var conn_info = {
             wifi_ssid:      request.body.wifi_ssid,
             wifi_passcode:  request.body.wifi_passcode,
@@ -59,6 +63,8 @@ module.exports = function(wifi_manager, callback) {
         // currently we ignore ifup failures.
         wifi_manager.enable_wifi_mode(conn_info, function(error) {
             if (error) {
+                wifi_status = "error";
+
                 console.log("Enable Wifi ERROR: " + error);
                 console.log("Attempt to re-enable AP mode");
                 wifi_manager.enable_ap_mode(config.access_point.ssid, function(error) {
@@ -66,11 +72,17 @@ module.exports = function(wifi_manager, callback) {
                 });
                 response.redirect("/");
             } else {
+                wifi_status = "enabled";
+
                 // Success! - exit
                 console.log("Wifi Enabled! - Exiting");
                 process.exit(0);
             }
         });
+    });
+
+    app.get("/api/wifi_status", function(request, response) {
+       response.json({status: wifi_status});
     });
 
     // Listen on our server

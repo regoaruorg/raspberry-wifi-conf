@@ -62,16 +62,33 @@ app.controller("AppController", ["PiManager", "$scope", "$location", "$timeout",
                 wifi_passcode:  $scope.network_passcode,
             };
 
-            PiManager.enable_wifi(wifi_info).then(function(response) {
-                $scope.connecting = false;
-                console.log(response.data);
-                if (response.data.status == "SUCCESS") {
-                    alert("connecting successful, AP enabled");
-                    console.log("AP Enabled - nothing left to do...");
-                } else {
-                    alert("connecting failed");
-                }
-            });
+            PiManager.enable_wifi(wifi_info).then(
+                function(response) { //SUCCESS
+                    $scope.connecting = false;
+                    console.log(response.data);
+                    if (response.data.status == "SUCCESS") {
+                        alert("connecting successful, AP enabled");
+                        console.log("AP Enabled - nothing left to do...");
+                    } else {
+                        alert("connecting failed");
+                    }
+                },
+                function (response) { //ERROR
+                    if (response.status === -1) { //probably network error after AP was switched of
+                        // wait for 2 minutes (AP should be up by then - when connecting to the wifi failed) and then
+                        // check for the wifi status
+                        setTimeout(function () {
+                            PiManager.get_wifi_status().then(
+                                function (response) { //SUCCESS
+                                    console.log(response)
+                                },
+                                function (response) { //ERROR
+                                    console.log(response)
+                                }
+                            );
+                        }, 1000 * 60 * 2);
+                    }
+                });
         }
 
         // Defer load the scanned results from the rpi
@@ -89,8 +106,12 @@ app.service("PiManager", ["$http",
             rescan_wifi: function() {
                 return $http.get("/api/rescan_wifi");
             },
-            enable_wifi: function(wifi_info) {
+            enable_wifi: function(wifi_info, successHandler, errorHandler) {
                 return $http.post("/api/enable_wifi", wifi_info);
+            },
+
+            get_wifi_status: function() {
+                return $http.get("/api/wifi_status");
             }
         };
     }]
