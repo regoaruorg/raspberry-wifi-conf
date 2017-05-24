@@ -30,7 +30,26 @@ async.series([
         });
     },
 
-    // 2. Check if wifi is enabled / connected
+    /*
+        2.
+        Check if ssid value is set inside wpa_supplicant.conf file. If the value is set, add a delay of 3 minutes
+        before testing wifi (for example in case of a power outage, modem/router might not come up as fast as the pi).
+        Do not add any delay when no wifi networks are configured (first time setup most probably).
+     */
+    function check_wpa_configuration(next_step) {
+        var wpa_conf = wifi_manager.get_wpa_conf();
+        if (wpa_conf.toLowerCase().indexOf("ssid") !== -1) {
+            console.log("Wifi ssid configured in wpa_supplicant.conf, add 3 minute delay");
+            setTimeout(function () {
+                next_step();
+            }, 1000 * 60 * 3); //3 minute delay
+        } else {
+            console.log("Wifi ssid missing from wpa_supplicant.conf, continue without delay");
+            next_step();
+        }
+    },
+
+    // 3. Check if wifi is enabled / connected
     function test_is_wifi_enabled(next_step) {
         wifi_manager.is_wifi_enabled(function(error, result_ip) {
           // console.log(result_ip)
@@ -44,7 +63,7 @@ async.series([
         });
     },
 
-    // 3. Turn RPI into an access point
+    // 4. Turn RPI into an access point
     function enable_rpi_ap(next_step) {
         wifi_manager.enable_ap_mode(config.access_point.ssid, function(error) {
             if(error) {
@@ -56,7 +75,7 @@ async.series([
         });
     },
 
-    // 4. Host HTTP server while functioning as AP, the "api.js"
+    // 5. Host HTTP server while functioning as AP, the "api.js"
     //    file contains all the needed logic to get a basic express
     //    server up. It uses a small angular application which allows
     //    us to choose the wifi of our choosing.

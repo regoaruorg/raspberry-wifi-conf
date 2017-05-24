@@ -64,8 +64,13 @@ module.exports = function() {
 
     // TODO: rpi-config-ap hardcoded, should derive from a constant
 
+    // Get wpa config
+    var _get_wpa_conf = function () {
+        return fs.readFileSync("/etc/wpa_supplicant/wpa_supplicant.conf", { encoding: "utf8" });
+    },
+
     // Get generic info on an interface
-    var _get_wifi_info = function(callback) {
+    _get_wifi_info = function(callback) {
         var output = {
             hw_addr:      "<unknown>",
             inet_addr:    "<unknown>",
@@ -343,6 +348,7 @@ module.exports = function() {
     };
 
     return {
+        get_wpa_conf:           _get_wpa_conf,
         get_wifi_info:           _get_wifi_info,
         reboot_wireless_network: _reboot_wireless_network,
 
