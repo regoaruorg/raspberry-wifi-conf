@@ -183,7 +183,7 @@ html, body {
     margin: auto;
 
     width: 320px;
-    height: 175px;
+    height: 195px;
 
     background: rgba(0,0,0,1.0);
     border: 2px solid #666666;
@@ -243,6 +243,14 @@ html, body {
 .connection-info.hide-me {
     top: 100%;
     opacity: 0;
+}
+
+.extra-info {
+    top: 165px!important;
+    left: 70px!important;
+    color: #cdcccc;
+    font-style: italic;
+    font-size: 14px;
 }
 /*loading anim*/
 .loading:after {

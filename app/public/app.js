@@ -102,6 +102,7 @@ app.controller("AppController", ["PiManager", "$scope", "$location", "$timeout",
 
             setTimeout(function () {
                 if (connected) {
+                    $scope.connecting = false;
                     alert("Connecting successful");
                 }
             }, (1000 * 60 * 2) + 30 * 1000); //2m 30sec
@@ -160,6 +161,7 @@ app.directive("rwcPasswordEntry", function($timeout) {
             "         <div class = 'btn btn-cancel' ng-click = 'reset(null)'>Cancel</div>",
             "         <div class = 'btn btn-ok' ng-click = 'submit()'>Submit</div>",
             "         <span class = 'connection-info loading' ng-class='{\"hide-me\": !connecting}'>Connecting</span>",
+            "         <span class = 'connection-info extra-info' ng-class='{\"hide-me\": !connecting}'>( may take several minutes )</span>",
             "    </div>",
             "</div>"
         ].join("\n"),
