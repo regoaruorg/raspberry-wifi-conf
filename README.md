@@ -113,11 +113,12 @@ TODO
 6. Add travis ci / coveralls hook(s)
 
 
-# Update 24may 2017 "hack"
+# Update - 24may 2017 "hack"
 
 For some reason dhcpcd server restart does not fully work every time (says its "ok" and "running" but something fails), so just in case also run server.js every time pi is booted up.
 
 Add these lines to /etc/rc.local
 
 cd /home/pi/raspberry-wifi-conf
+
 sudo /usr/bin/node server.js < /dev/null &
