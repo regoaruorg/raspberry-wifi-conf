@@ -111,3 +111,13 @@ TODO
 4. ifup should never be allowed to fail... same w/ the "start" pieces of various services. Perhaps we need to tease the restart into stop and start and allow the stop to fail.
 5. Add tests
 6. Add travis ci / coveralls hook(s)
+
+
+# Update 24may 2017 "hack"
+
+For some reason dhcpcd server restart does not fully work every time (says its "ok" and "running" but something fails), so just in case also run server.js every time pi is booted up.
+
+Add these lines to /etc/rc.local
+
+cd /home/pi/raspberry-wifi-conf
+sudo /usr/bin/node server.js < /dev/null &
